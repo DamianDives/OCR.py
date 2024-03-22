@@ -1,0 +1,92 @@
+import tkinter as tk
+from tkinter import filedialog
+from PIL import Image, ImageTk
+import pytesseract
+
+# Install Tesseract and language packages for additional language support:
+# Hindi: https://github.com/tesseract-ocr/tessdata/blob/main/hin.traineddata
+# Japanese: https://github.com/tesseract-ocr/tessdata/blob/main/jpn.traineddata
+# Telugu: https://github.com/tesseract-ocr/tessdata/blob/main/tel.traineddata
+
+def display_image(image_path):
+    # Load image using PIL
+    pil_image = Image.open(image_path)
+    width, height = pil_image.size
+
+    # Display image in Tkinter window
+    image = ImageTk.PhotoImage(pil_image)
+    image_label.config(image=image)
+    image_label.image = image
+    image_label.pack()
+
+def select_image():
+    # Open file dialog to select an image file
+    file_path = filedialog.askopenfilename(title="Select Your Image! ", filetypes=[("Image files", "*.jpg *.jpeg *.png *.bmp")])
+    if file_path:
+        display_image(file_path)
+        file_path_label.config(text=file_path)
+
+def perform_ocr(image_path, lang="eng"):
+    try:
+        # Perform OCR on the selected image using Tesseract
+        text = pytesseract.image_to_string(Image.open(image_path), lang=lang)
+        return text
+    except Exception as e:
+        print("Error:", e)
+        return None
+
+def show_ocr_result():
+    # Get the selected image path
+    image_path = file_path_label.cget("text")
+
+    # Get the selected language
+    lang = language_var.get()
+
+    # Perform OCR and display the result
+    result_text = perform_ocr(image_path, lang)
+    if result_text is not None:
+        result_text_label.config(text=result_text)
+        result_text_label.pack()
+    else:
+        result_text_label.config(text="OCR failed. Either You A Fool Or I Am.")
+        result_text_label.pack()
+
+# Create the main Tkinter window
+root = tk.Tk()
+root.title("Optical Character Recognizer-Damian")
+
+# Create a frame for the image display
+image_frame = tk.Frame(root)
+image_frame.pack()
+
+# Create a label for displaying the selected file path
+file_path_label = tk.Label(root, text="")
+file_path_label.pack()
+
+# Create a label for displaying the OCR result
+result_text_label = tk.Label(root, text="")
+
+# Create a label for displaying the image
+image_label = tk.Label(image_frame)
+image_label.pack()
+
+# Add a button to select and display the image
+select_button = tk.Button(root, text="Select Your Image", command=select_image)
+select_button.pack(pady=10)
+
+# Add a button to perform OCR on the selected image
+ocr_button = tk.Button(root, text="Perform OCR", command=show_ocr_result)
+ocr_button.pack(pady=10)
+
+# Create a variable to store the selected language
+language_var = tk.StringVar(root)
+language_var.set("eng")
+
+# Create a dropdown menu for selecting the language
+language_label = tk.Label(root, text="Select What You Prefer Bro:")
+language_label.pack()
+language_dropdown = tk.OptionMenu(root, language_var, "englishh", "hindi", "japanese", "telugu")  # Add more languages as needed
+language_dropdown.pack()
+
+# Run the Tkinter event loop
+root.mainloop()
