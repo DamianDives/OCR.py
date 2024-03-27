@@ -3,17 +3,12 @@ from tkinter import filedialog
 from PIL import Image, ImageTk
 import pytesseract
 
-# Install Tesseract and language packages for additional language support:
-# Hindi: https://github.com/tesseract-ocr/tessdata/blob/main/hin.traineddata
-# Japanese: https://github.com/tesseract-ocr/tessdata/blob/main/jpn.traineddata
-# Telugu: https://github.com/tesseract-ocr/tessdata/blob/main/tel.traineddata
-
 def display_image(image_path):
-    # Load image using PIL
+    # PIL Helps In Loading Image File That We Are Gonna Provide Through The Below Code Lines
     pil_image = Image.open(image_path)
     width, height = pil_image.size
 
-    # Display image in Tkinter window
+    # Image Display in Tkinter window (GUI)
     image = ImageTk.PhotoImage(pil_image)
     image_label.config(image=image)
     image_label.image = image
