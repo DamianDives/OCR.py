@@ -85,7 +85,7 @@ language_var.set("eng")
 # Create a dropdown menu for selecting the language
 language_label = tk.Label(root, text="Select What You Prefer Bro:")
 language_label.pack()
-language_dropdown = tk.OptionMenu(root, language_var, "englishh", "hindi", "japanese", "telugu")  # Add more languages as needed
+language_dropdown = tk.OptionMenu(root, language_var, "english", "hindi", "japanese", "telugu")  # Add more languages as needed
 language_dropdown.pack()
 
 # Run the Tkinter event loop
